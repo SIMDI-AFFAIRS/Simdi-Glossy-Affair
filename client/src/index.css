@@ -1,0 +1,84 @@
+@import 'tailwindcss';
+/* @import '../public/img/hero/heroBg.png' */
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem;
+  text-align: center; */
+}
+
+/* main {
+  @apply min-h-screen
+} */
+
+.heroB {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%), url('/img/hero/heroBg.png');
+}
+
+.lip-gloss {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%), url('/img/hero/LipGloss.png');
+}
+
+.skin-care {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%), url('/img/hero/skincare.png');
+}
+
+.sarah-m {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%), url('/img/hero/sarahM.png');
+}
+
+.emily-r {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%), url('/img/hero/emilyR.png');
+}
+
+.jessica-l {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%), url('/img/hero/jessicaL.png');
+}
+
+.desk-nav {
+  @apply text-[#181113] font-medium leading-normal hover:scale-105 transition-all duration-150;
+}
+
+.mobile-nav {
+  @apply text-[#181214] font-medium leading-normal hover:scale-105 transition-all duration-150;
+}
+
+.mobile-navbar {
+  /* For custom animation if needed */
+  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+
+.shop-item:hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+/* .mobile-navbar {
+  @apply transition-all duration-300;
+
+} */
+
+/* .category-scroll {
+  animation: animateScroll 10s linear infinite;
+}
+
+@keyframes animateScroll {
+  to {
+    translate: calc(-5 * .5rem);
+  }
+} */

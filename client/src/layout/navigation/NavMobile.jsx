@@ -43,7 +43,7 @@ const NavMobile = () => {
               ></path>
             </svg>
           </div>
-          <h2 className="text-[#181113] text-lg font-bold leading-tight tracking-[-0.015em]">Simdi Glossy Affair</h2>
+          <h2 className="text-[#181113] text-lg font-bold leading-tight tracking-[-0.015em]">Simdi's Glossy Affair</h2>
         </Link>
         <button onClick={toggleMenu} className='cursor-pointer'>
           <Hamburger toggle={setIsHamburgerOpen} toggled={isHamburgerOpen} size={25} label='Menu Bar' />

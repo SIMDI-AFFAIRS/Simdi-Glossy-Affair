@@ -17,7 +17,7 @@ const NavDesk = () => {
               ></path>
             </svg>
           </div>
-          <h2 className="text-[#181113] text-lg font-bold leading-tight tracking-[-0.015em]">Simdi Glossy Affair</h2>
+          <h2 className="text-[#181113] text-lg font-bold leading-tight tracking-[-0.015em]">Simdi's Glossy Affair</h2>
         </Link>
         <div className="flex items-center gap-8 border py-2 px-4 rounded-xl bg-[#f4f0f2]">
           {routes.map((route) => {

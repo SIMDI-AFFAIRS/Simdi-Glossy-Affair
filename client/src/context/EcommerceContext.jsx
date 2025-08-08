@@ -12,6 +12,7 @@ export const EcommerceProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
+  const [cartTotal, setCartTotal] = useState(0);
 
   // Load authenticated user
   useEffect(() => {
@@ -31,16 +32,38 @@ export const EcommerceProvider = ({ children }) => {
 
   // Auth: Login
   const login = async ({ email, password }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+    if (error) {
+      toast.error(error.message);
+      throw error;
+    };
+    setUser(data.user);
     return data?.user;
   };
 
   // Auth: Signup
   const signup = async (email, password, onAfterSignup) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
+    const { data, error } = await supabase.auth.signUp({ 
+      email: email, 
+      password: password, 
+      options: {
+        emailRedirectTo: 'https://simdis-glossy-affair.vecel.app/email-confirmed',
+      },
+    });
+    if (error.message === 'User already registered') {
+      toast.error('User already registered');
+      // throw error;
+    } 
+    // else if (error) {
+    //   toast.error(error.message);
+    //   throw error;
+    // };
+
+    // If user is created, add to profiles table
+    const user = data?.user;
+    if (user) {
+      await supabase.from('profiles').insert({ id: user.id, email: user.email });
+    }
 
     if (onAfterSignup) {
       onAfterSignup();
@@ -51,6 +74,8 @@ export const EcommerceProvider = ({ children }) => {
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    console.log('User logged out');
+    toast.success('Logged out successfully');
   };
 
   // Fetch all products
@@ -58,6 +83,7 @@ export const EcommerceProvider = ({ children }) => {
     const { data, error } = await supabase.from('products').select('*');
     if (error) throw error;
     setProducts(data);
+    // console.log('Products fetched:', data);
   };
 
   // Search products
@@ -65,7 +91,7 @@ export const EcommerceProvider = ({ children }) => {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .ilike('name', `%${query}%`);
+      .ilike('title', `%${query}%`);
     if (error) throw error;
     setProducts(data);
   };
@@ -117,38 +143,6 @@ export const EcommerceProvider = ({ children }) => {
     }
   };
 
-  // Fetch cart for current user (with joined product info)
-  const fetchCartForUser = async () => {
-    if (!user) return;
-
-    setCartLoading(true);
-
-    const { data, error } = await supabase
-      .from('cart')
-      .select(`
-        *,
-        products (
-          title,
-          imageUrl,
-          price
-        )
-      `)
-      .eq('user_id', user.id);
-
-    if (error) {
-      console.error('Error fetching cart:', error.message);
-      toast.error('Failed to load cart');
-    } else {
-      const formattedCart = data.map((item) => ({
-        ...item,
-        ...item.products
-      }));
-      setCart(formattedCart);
-    }
-
-    setCartLoading(false);
-  };
-
   // Remove from cart
   const removeFromCart = async (cartItemId) => {
     if (!user) return;
@@ -166,6 +160,43 @@ export const EcommerceProvider = ({ children }) => {
       toast.success('Item removed from cart');
       fetchCartForUser();
     }
+  };
+
+  // Fetch cart for current user (with joined product info)
+  const fetchCartForUser = async () => {
+    if (!user) return;
+
+    setCartLoading(true);
+
+    const { data, error } = await supabase
+      .from('cart')
+      .select(`
+        *,
+        products (
+          title,
+          image_url,
+          price
+        )
+      `)
+      .eq('user_id', user.id);
+
+    if (error) {
+      console.error('Error fetching cart:', error.message);
+      toast.error('Failed to load cart');
+    } else {
+      const formattedCart = data.map((item) => ({
+        ...item,
+        ...item.products
+      }));
+
+      setCart(formattedCart);
+
+      // Compute total quantity
+      const total = formattedCart.reduce((sum, item) => sum + item.quantity, 0);
+      setCartTotal(total);
+    }
+
+    setCartLoading(false);
   };
 
   // Fetch user profile
@@ -209,6 +240,53 @@ export const EcommerceProvider = ({ children }) => {
     setUserProfile(null);
   };
 
+  // Adding Items
+  const itemIncrement = async (productId) => {
+    if (!user) return;
+
+    const existingItem = cart.find((item) => item.product_id === productId);
+    if (!existingItem) return;
+
+    const { error } = await supabase
+      .from('cart')
+      .update({ quantity: existingItem.quantity + 1 })
+      .eq('id', existingItem.id);
+
+    if (error) {
+      console.error('Error incrementing item:', error.message);
+      console.log('Error incrementing item:', error.message);
+      toast.error('Could not increase quantity');
+    } else {
+      fetchCartForUser();
+    }
+  };
+
+  const itemDecrement = async (productId) => {
+    if (!user) return;
+
+    const existingItem = cart.find((item) => item.product_id === productId);
+    if (!existingItem) return;
+
+    if (existingItem.quantity > 1) {
+      const { error } = await supabase
+        .from('cart')
+        .update({ quantity: existingItem.quantity - 1 })
+        .eq('id', existingItem.id);
+
+      if (error) {
+        console.error('Error decrementing item:', error.message);
+        console.log('Error decrementing item:', error.message);
+        toast.error('Could not decrease quantity');
+      } else {
+        fetchCartForUser();
+      }
+    } else {
+      // If quantity is 1 remove the item
+      await removeFromCart(existingItem.id);
+    }
+  };
+  
+
   return (
     <EcommerceContext.Provider
       value={{
@@ -224,6 +302,9 @@ export const EcommerceProvider = ({ children }) => {
         fetchCartForUser,
         addToCart,
         removeFromCart,
+        itemIncrement,
+        itemDecrement,
+        cartTotal,
         userProfile,
         loadingProfile,
         fetchUserProfile,

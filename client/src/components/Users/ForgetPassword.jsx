@@ -15,12 +15,16 @@ const ForgetPassword = () => {
     if (coolDown > 0) return;
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:1500/reset-password',
+      redirectTo: 'http://localhost:1500/reset-password', // This is still for production
+      // redirectTo: 'https://simdis-glossy-affair.vercel.app/reset-password', // This is for deployed
     });
 
     if (error) {
-      setMessage('Error sending Reset link');
-      toast.error('Error sending Reset link');
+      setMessage(error);
+      toast.error(error);
+      console.error(error);
+      // setMessage('Error sending Reset link');
+      // toast.error('Error sending Reset link');
     } else {
       setMessage('Reset Link sent! Check your email');
       toast.success('Reset Link sent! Check your email');

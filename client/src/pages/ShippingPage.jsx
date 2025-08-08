@@ -1,11 +1,11 @@
-// import CheckOut from "../components/Checkout/CheckOut"
-import ShipToWhatsapp from "../components/Checkout/ShipToWhatsapp"
+import CheckOut from "../components/Checkout/CheckOut"
+// import ShipToWhatsapp from "../components/Checkout/ShipToWhatsapp"
 
 const ShippingPage = () => {
   return (
     <div>
-      {/* <CheckOut /> */}
-      <ShipToWhatsapp />
+      <CheckOut />
+      {/* <ShipToWhatsapp /> */}
     </div>
   )
 }

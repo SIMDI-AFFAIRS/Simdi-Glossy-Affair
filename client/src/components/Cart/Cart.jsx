@@ -1,122 +1,194 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useEcommerceContext from '../../context/EcommerceContext';
+import { Loader2, Trash2 } from 'lucide-react';
+import useEcommerce from '../../context/EcommerceContext'; // Fixed import
+import NoUser from '../Users/NoUser';
 
 const Cart = () => {
   const {
     cart,
     cartLoading,
-    addToCart,
     removeFromCart,
+    itemIncrement,
+    itemDecrement,
     userProfile,
+    user,
     fetchCartForUser
-  } = useEcommerceContext();
+  } = useEcommerce(); // Fixed context usage
 
-  const [quantities, setQuantities] = useState({});
-
-  useEffect(() => {
-    if (userProfile) fetchCartForUser();
-  }, [userProfile]);
+  const [operationLoading, setOperationLoading] = useState(new Set());
 
   useEffect(() => {
-    const q = {};
-    cart.forEach(item => {
-      q[item.id] = item.quantity || 1;
-    });
-    setQuantities(q);
-  }, [cart]);
+    // Check for user instead of userProfile for cart fetching
+    if (user) {
+      fetchCartForUser();
+    }
+  }, [user]);
 
-  const handleIncrement = (item) => {
-    addToCart({ ...item, quantity: 1 });
-  };
-
-  const handleDecrement = (item) => {
-    if ((item.quantity || 1) > 1) {
-      addToCart({ ...item, quantity: -1 });
-    } else {
-      removeFromCart(item.id);
+  const handleIncrement = async (item) => {
+    try {
+      setOperationLoading(prev => new Set([...prev, `inc-${item.id}`]));
+      await itemIncrement(item.product_id);
+    } catch (error) {
+      console.error('Error incrementing item:', error);
+    } finally {
+      setOperationLoading(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(`inc-${item.id}`);
+        return newSet;
+      });
     }
   };
 
-  const handleRemove = (item) => {
-    removeFromCart(item.id);
+  const handleDecrement = async (item) => {
+    try {
+      setOperationLoading(prev => new Set([...prev, `dec-${item.id}`]));
+      await itemDecrement(item.product_id);
+    } catch (error) {
+      console.error('Error decrementing item:', error);
+    } finally {
+      setOperationLoading(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(`dec-${item.id}`);
+        return newSet;
+      });
+    }
   };
 
+  const handleRemove = async (item) => {
+    try {
+      setOperationLoading(prev => new Set([...prev, `remove-${item.id}`]));
+      await removeFromCart(item.id);
+    } catch (error) {
+      console.error('Error removing item:', error);
+    } finally {
+      setOperationLoading(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(`remove-${item.id}`);
+        return newSet;
+      });
+    }
+  };
+
+  // Calculate totals
   const subtotal = cart.reduce((sum, item) => {
-    const price = parseFloat(item.price?.replace('$', '') || 0);
+    const price = parseFloat(item.price || 0);
     return sum + price * (item.quantity || 1);
   }, 0);
+  
   const taxes = +(subtotal * 0.08).toFixed(2);
   const total = +(subtotal + taxes).toFixed(2);
 
-  // Not logged in
-  if (!userProfile) {
+  // Not logged in - check for user instead of userProfile
+  if (!user) {
     return (
-      <section className="p-10 bg-[#ac9f9f]">
-        <div className="flex flex-col items-center justify-center min-h-[40vh] text-center bg-white/80 rounded-xl px-6 py-10 shadow-md max-w-md mx-auto bg-[#88636f] text-white">
-          <h2 className="text-2xl font-semibold text-[#181113] mb-4">You're not logged in</h2>
-          <p className="text-[#2b2325] mb-6">To view your cart and start shopping, please log in or create an account.</p>
-          <div className="flex gap-4">
-            <Link
-              to="/login"
-              className="px-5 py-2 bg-[#574f4f] text-white rounded-full hover:bg-[#a27575] transition"
-            >
-              Log In
-            </Link>
-            <Link
-              to="/signup"
-              className="px-5 py-2 border border-[#ac9f9f] text-[#1a1818] rounded-full hover:bg-[#c5a6a6] transition"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </section>
-
+      <NoUser userText='cart' />
     );
   }
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-[#ac9f9f] group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
-        <div className="px-5 md:px-10 flex flex-1 justify-center py-5">
-          <div className="layout-content-container flex flex-col w-[512px] py-5 max-w-[960px] flex-1">
+        <div className="flex flex-1 justify-center py-5 px-[10px]">
+          <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
             <h1 className="text-[#181113] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
               Your Cart
             </h1>
 
-            <div className='bg-white/80 px-4 min-h-[72px] py-2 rounded-xl'>
+            <div className='bg-white/80 min-h-[72px] py-2 rounded-xl'>
               {cartLoading ? (
-                <div className="py-8 text-center text-gray-600">Loading cart...</div>
+                <div className="py-8 text-center text-gray-600 flex items-center justify-center">
+                  <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                  Loading cart...
+                </div>
               ) : cart.length === 0 ? (
-                <div className="py-8 text-center text-gray-500">Your cart is empty.</div>
+                <div className="py-8 text-center text-gray-500">
+                  <p className="text-lg mb-2">Your cart is empty.</p>
+                  <Link 
+                    to="/shop" 
+                    className="text-[#ac9f9f] hover:text-[#9a8c8c] underline font-medium"
+                  >
+                    Continue Shopping
+                  </Link>
+                </div>
               ) : (
-                cart.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 py-2 justify-between border-b last:border-b-0">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14"
-                        style={{ backgroundImage: `url(${item.imageUrl})` }}
-                      />
-                      <div className="flex flex-col justify-center">
-                        <p className="text-[#181113] text-base font-medium leading-normal">{item.title}</p>
-                      </div>
-                    </div>
-                    <div className="shrink-0">
-                      <div className="flex items-center gap-2 text-[#181113]">
-                        <button onClick={() => handleDecrement(item)} className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f4f0f2]">-</button>
-                        <input
-                          className="w-8 text-center bg-transparent"
-                          type="number"
-                          value={item.quantity || 1}
-                          readOnly
+                cart.map((item) => {
+                  const isIncrementing = operationLoading.has(`inc-${item.id}`);
+                  const isDecrementing = operationLoading.has(`dec-${item.id}`);
+                  const isRemoving = operationLoading.has(`remove-${item.id}`);
+                  
+                  return (
+                    <div key={item.id} className="flex items-center gap-4 py-3 px-2 justify-between border-b last:border-b-0">
+                      <div className="flex items-center gap-4">
+                        <div
+                          className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14 border border-gray-400"
+                          style={{ backgroundImage: `url(${item.image_url})` }} // Fixed property name
                         />
-                        <button onClick={() => handleIncrement(item)} className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f4f0f2]">+</button>
-                        <button onClick={() => handleRemove(item)} className="ml-2 text-red-500">Remove</button>
+                        <div className="flex flex-col justify-center">
+                          <p className="text-[#181113] text-base font-medium leading-normal">{item.title}</p>
+                          <p className="text-[#88636f] text-sm">GH¢ {item.price}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="shrink-0">
+                        <div className="flex items-center gap-2 text-[#181113]">
+                          <button 
+                            onClick={() => handleDecrement(item)} 
+                            disabled={isDecrementing || item.quantity <= 0}
+                            title='Decrement quantity'
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#fff] hover:bg-[#f4f0f2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-gray-400"
+                          >
+                            {isDecrementing ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <span className="font-bold text-black text-[20px]">-</span>
+                            )}
+                          </button>
+                          
+                          <input
+                            className="w-12 text-center bg-transparent border border-gray-300 rounded px-1 py-1"
+                            type="number"
+                            value={item.quantity || 1}
+                            readOnly
+                          />
+                          
+                          <button 
+                            onClick={() => handleIncrement(item)} 
+                            disabled={isIncrementing}
+                            title='Increase quantity'
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#fff] hover:bg-[#f4f0f2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-gray-400"
+                          >
+                            {isIncrementing ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <span className="font-bold">+</span>
+                            )}
+                          </button>
+                          
+                          <button 
+                            onClick={() => handleRemove(item)} 
+                            disabled={isRemoving}
+                            className="ml-3 p-1 border border-gray-500 text-red-500 hover:text-red-700 hover:bg-white rounded-md cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Remove from cart"
+                          >
+                            {isRemoving ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                        
+                        {/* Item total */}
+                        <div className="text-center mt-1">
+                          <p className="text-sm text-[#88636f] font-medium">
+                            Total: GH¢ {((parseFloat(item.price) || 0) * (item.quantity || 1)).toFixed(2)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
 
@@ -126,28 +198,28 @@ const Cart = () => {
                 <h3 className="text-[#181113] text-lg font-bold px-4 pt-4 pb-2">Order Summary</h3>
                 <div className="p-4">
                   <div className="flex justify-between py-2">
-                    <p className="text-[#88636f] text-sm">Subtotal</p>
-                    <p className="text-[#181113] text-sm">${subtotal.toFixed(2)}</p>
+                    <p className="text-[#181113] font-normal text-sm">Subtotal ({cart.reduce((sum, item) => sum + (item.quantity || 1), 0)} items)</p>
+                    <p className="text-[#181113] font-semibold text-sm">GH¢ {subtotal.toFixed(2)}</p>
                   </div>
                   <div className="flex justify-between py-2">
-                    <p className="text-[#88636f] text-sm">Shipping</p>
-                    <p className="text-[#181113] text-sm">Free</p>
+                    <p className="text-[#181113] font-normal text-sm">Shipping</p>
+                    <p className="text-[#181113] font-semibold text-sm">Free</p>
                   </div>
                   <div className="flex justify-between py-2">
-                    <p className="text-[#88636f] text-sm">Taxes</p>
-                    <p className="text-[#181113] text-sm">${taxes.toFixed(2)}</p>
+                    <p className="text-[#181113] font-normal text-sm">Taxes (8%)</p>
+                    <p className="text-[#181113] font-semibold text-sm">GH¢ {taxes.toFixed(2)}</p>
                   </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 border-t border-gray-400">
                   <div className="flex justify-between py-2">
-                    <p className="text-[#88636f] text-sm">Total</p>
-                    <p className="text-[#181113] text-sm">${total.toFixed(2)}</p>
+                    <p className="text-[#181113] text-lg font-bold">Total</p>
+                    <p className="text-[#181113] text-lg font-bold">GH¢ {total.toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="flex px-4 py-3">
                   <Link
                     to='/checkout'
-                    className="flex items-center justify-center w-full h-12 px-5 rounded-full bg-[#ea477d] text-white font-bold"
+                    className="flex items-center justify-center w-full h-12 px-5 rounded-2xl bg-[#ea477d] hover:bg-[#d63d6f] text-white font-bold transition-colors"
                   >
                     Proceed to Checkout
                   </Link>

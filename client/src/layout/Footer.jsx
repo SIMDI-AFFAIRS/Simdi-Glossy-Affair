@@ -1,7 +1,9 @@
-import React from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+
   return (
     <footer className="flex justify-center flex-col bg-[#ccb6bd]">
       <div className="@container">
@@ -20,9 +22,11 @@ const Footer = () => {
             <label className="flex flex-col min-w-40 h-14 max-w-[480px] flex-1">
               <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
                 <input
+                type='email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#181113] focus:outline-0 focus:ring-0 border-none bg-[#f4f0f2] focus:border-none h-full placeholder:text-[#88636f] px-4 rounded-r-none border-r-0 pr-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
-                  value=""
                 />
                 <div className="flex items-center justify-center rounded-r-xl border-l-0 border-none bg-[#f4f0f2] pr-2">
                   <button
@@ -46,7 +50,7 @@ const Footer = () => {
               <Link className="text-[#070707] text-base font-normal leading-normal min-w-40" to="contact">Contact Us</Link>
             </div>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="#">
+              <Link to="https://instagram.com/i_amraphael.dubem">
                 <div className="text-[#070707]" data-icon="InstagramLogo" data-size="24px" data-weight="regular">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                     <path
@@ -54,8 +58,8 @@ const Footer = () => {
                     ></path>
                   </svg>
                 </div>
-              </a>
-              <a href="#">
+              </Link>
+              <Link to="https://x.com/dubemUmeh">
                 <div className="text-[#070707]" data-icon="TwitterLogo" data-size="24px" data-weight="regular">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                     <path
@@ -63,8 +67,8 @@ const Footer = () => {
                     ></path>
                   </svg>
                 </div>
-              </a>
-              <a href="#">
+              </Link>
+              <Link to="https://facebook.com/dubem.umehRaphael">
                 <div className="text-[#070707]" data-icon="FacebookLogo" data-size="24px" data-weight="regular">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                     <path
@@ -72,7 +76,7 @@ const Footer = () => {
                     ></path>
                   </svg>
                 </div>
-              </a>
+              </Link>
             </div>
             <p className="text-[#070707] text-base font-normal leading-normal">@2024 Simdi Glossy Affair. All rights reserved.</p>
           </div>

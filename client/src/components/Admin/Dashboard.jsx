@@ -136,10 +136,10 @@ const Dashboard = () => {
 
   return (
     <div
-      className="min-h-screen w-full bg-[#1f141a] flex flex-col items-center py-5 px-5 md:px-10 overflow-x-hidden"
+      className="min-h-screen w-full bg-gradient-to-tr from-[#a75e5eb3] to-[#ac9f9f] flex flex-col items-center py-5 px-5 md:px-10 overflow-x-hidden"
       style={{ fontFamily: 'Plus Jakarta Sans, Noto Sans, sans-serif' }}
     >
-      <div className="w-full max-w-6xl bg-[#55434d] rounded-2xl shadow-lg p-6 flex flex-col gap-6">
+      <div className="w-full max-w-6xl bg-gradient-to-tr from-[#a75e5eb3] to-[#807474] rounded-2xl shadow-lg p-6 flex flex-col gap-6">
         <h2 className="text-white text-2xl md:text-3xl font-bold leading-tight mb-2">Add a product</h2>
 
         {/* Product Title */}
@@ -205,7 +205,7 @@ const Dashboard = () => {
         <div>
           <h3 className="text-white text-lg font-bold mb-2 mt-4">Details</h3>
           <div className="flex flex-col md:flex-row gap-4">
-            {['price', 'intro', 'how_to_use'].map((field, idx) => (
+            {['Price', 'Intro', 'How to use'].map((field, idx) => (
               <div className="flex flex-col flex-1 gap-2" key={idx}>
                 <label className="text-white text-base font-medium">
                   {field === 'price' ? <>Price <span className="font-semibold">GH¢</span></> : field.replace('_', ' ')}
@@ -239,7 +239,7 @@ const Dashboard = () => {
         <div>
           <h3 className="text-white text-lg font-bold mb-2 mt-4">Specifications</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['shade', 'finish', 'size', 'color'].map((field, idx) => (
+            {['Shade', 'Finish', 'Size', 'Color'].map((field, idx) => (
               <div className="flex flex-col gap-2" key={idx}>
                 <label className="text-white text-base font-medium">{field}</label>
                 <input

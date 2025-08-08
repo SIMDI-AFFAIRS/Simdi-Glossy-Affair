@@ -26,13 +26,13 @@ const SignUp = () => {
         })(),
         {
           loading: 'Signing up...',
-          error: 'Signup failed, try again!',
+          error: '',
           success:'Signup Successfully!'
         }
       )
     } catch (error) {
       console.error(error);
-      setMessage('Signup failed, try again!');
+      setMessage(error.message);
     } finally {
       setLoading(false);
       setMessage('');

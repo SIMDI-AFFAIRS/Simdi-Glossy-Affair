@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useEcommerce from '../../context/EcommerceContext';
 import { LogOutIcon, Mail, Phone } from 'lucide-react';
+import NoUser from './NoUser';
 
 const UserProfile = () => {
   const {
@@ -12,7 +13,7 @@ const UserProfile = () => {
     logout,
   } = useEcommerce();
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [form, setForm] = useState({ full_name: '', email: '', phone: '' });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +26,7 @@ const UserProfile = () => {
   useEffect(() => {
     if (userProfile) {
       setForm({
-        name: userProfile.name || '',
+        full_name: userProfile.full_name || '',
         email: userProfile.email || '',
         phone: userProfile.phone || '',
       });
@@ -47,18 +48,11 @@ const UserProfile = () => {
     await deleteProfile();
   };
 
-  if (!userProfile) return (
-    <section className='w-full min-h-[40vh] bg-[#ac9f9f] p-5'>
-      <div className="w-full h-full flex items-center justify-center pt-5">
-        <section className="w-40 h-40 flex items-center justify-center relative">
-          <div className="absolute inset-0 w-full h-full border-t-transparent border-b-transparent border-4 rounded-full animate-spin"></div>
-          <div className="text-center text-base text-[#181113] font-normal font-sans tracking-tightest py-10 animate-pulse relative">
-            Loading profile...
-          </div>
-        </section>
-      </div>
-    </section>
-  );
+  if (!userProfile) {
+    return (
+      <NoUser userText='profile' />
+    )
+  }
 
   return (
     <section className='flex flex-col items-center justify-center mx-auto p-10 bg-gradient-to-tr from-[#a75e5eb3] to-[#ac9f9f]'>
@@ -76,13 +70,13 @@ const UserProfile = () => {
           </section>
           {!editMode ? (
             <section className='mt-5 w-full flex flex-col items-start justify-start gap-3'>
-              <p>Name: {form.name}</p>
+              <p>Name: {form.full_name}</p>
               <span className='flex flex-row items-center'><Mail className='size-5 mr-1' /> {form.email}</span>
               <span className='flex flex-row items-center'><Phone className='size-5 mr-1' /> {form.phone}</span>
 
               <div className="flex items-start flex-col gap-4 mt-4">
                 <button onClick={() => setEditMode(true)} className="underline cursor-pointer">Edit</button>
-                <button onClick={logout} className="flex items-center gap-1">
+                <button onClick={logout} className="flex items-center gap-1 cursor-pointer">
                   <LogOutIcon className='size-5' />
                   <span>Log Out</span>
                 </button>
@@ -90,8 +84,8 @@ const UserProfile = () => {
             </section>
           ) : (
             <form onSubmit={handleUpdate} className="flex flex-col gap-1 w-full">
-              Name: <input name="name" value={form.name} onChange={handleChange} className="border p-1.5 w-full rounded-lg" />
-              Email: <input name="email" value={form.email} onChange={handleChange} className="border p-1.5 w-full rounded-lg" />
+              Name: <input name="full_name" value={form.full_name} onChange={handleChange} className="border p-1.5 w-full rounded-lg" />
+              Email: <input name="email" value={form.email} disabled onChange={handleChange} className="border p-1.5 w-full rounded-lg cursor-not-allowed" />
               Phone: <input name="phone" value={form.phone} onChange={handleChange} className="border p-1.5 w-full rounded-lg" />
               <div className="flex gap-3 mt-2">
                 <button type="submit" className="bg-black cursor-pointer text-white px-4 py-2 rounded">Save</button>

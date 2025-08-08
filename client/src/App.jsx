@@ -26,6 +26,7 @@ const LogInPage = lazy(() => import('./components/Users/LogIn'));
 const SignUpPage = lazy(() => import('./components/Users/SignUp'));
 const PasswordForgotPage = lazy(() => import('./components/Users/ForgetPassword'));
 const PasswordResetPage = lazy(() => import('./components/Users/ResetPassword'));
+const EmailConfirmPage = lazy(() => import('./components/Users/EmailConfirmed'));
 // Wrapper Component to handle route refreshing
 const RouteWrapper = ({ children }) => {
   const location = useLocation();
@@ -73,6 +74,7 @@ const App = () => {
         <Route path='/signup' element={ <SignUpPage/> } />
         <Route path='/forgot-password' element={ <PasswordForgotPage/> } />
         <Route path='/reset-password' element={ <PasswordResetPage/> } />
+        <Route path='/email-confirmed' element={ <EmailConfirmPage/> } />
         <Route path='*' element={ <PageNotFound /> } />
       </Route>
     )

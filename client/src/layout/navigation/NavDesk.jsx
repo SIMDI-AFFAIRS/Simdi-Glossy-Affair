@@ -1,7 +1,10 @@
 import { Link, NavLink } from 'react-router-dom';
 import { routes } from './routes';
+import useEcommerce from '../../context/EcommerceContext';
 
 const NavDesk = () => {
+  const { cartTotal } = useEcommerce();
+
   return (
     <>
       <div className="flex items-center gap-8">
@@ -10,8 +13,8 @@ const NavDesk = () => {
           <div className="size-7">
             <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
                 fill="currentColor"
               ></path>
@@ -80,15 +83,25 @@ const NavDesk = () => {
           {/* Cart Bar */}
           <NavLink
             to='/cart'
-            className="flex max-w-[480px] border border-gray-400 cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#f4f0f2] text-[#181113] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+            className={`flex max-w-[480px] border ${ cartTotal > 0 ? 'border-t-transparent px-4' : 'px-2.5' } border-gray-400 cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#f4f0f2] text-[#181113] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 relative`}
           >
-            <div className="text-[#181113]" data-icon="ShoppingBag" data-size="20px" data-weight="regular">
+            <div className={`text-[#181113] ${cartTotal > 0 ? 'relative top-1' : ''}`} data-icon="ShoppingBag" data-size="20px" data-weight="regular">
               <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
                 <path
                   d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"
                 ></path>
               </svg>
             </div>
+
+            {
+              cartTotal > 0 && (
+                <div className='fixed top-1 !z-[150] text-[16px] font-medium font-mono text-[#085e16] text-shadow-2xs text-shadow-rose-800'>
+                  <span className='flex items-center justify-center w-[50px] h-[20px] border border-gray-400 border-b-transparent border-x-transparent rounded-full'>
+                    {cartTotal}
+                  </span>
+                </div>
+              )
+            }
           </NavLink>
         </div>
       </div>

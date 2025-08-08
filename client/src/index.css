@@ -64,7 +64,7 @@
   transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
 }
 
-.shop-item:hover {
+.shop-item:hover, .lip-glosses {
   background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%);
 }
 

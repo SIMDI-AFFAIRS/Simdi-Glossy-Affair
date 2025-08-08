@@ -23,16 +23,16 @@ const ShopItems = ({ selectedItem, setSelectedItem }) => {
             <div className="flex w-full grow bg-white @container p-4 rounded-xl">
               <div className="w-full gap-1 overflow-hidden bg-white @[480px]:gap-2 aspect-[3/2] rounded-xl grid grid-cols-[2fr_1fr_1fr]">
                 <div
-                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none row-span-2 lip-gloss-1"
-                  style={{ backgroundImage: `url(${selectedItem.itemImg1})` }}
+                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none row-span-2 lip-glosses"
+                  style={{ backgroundImage: `url(${selectedItem.item_img_1})` }}
                 ></div>
                 <div
-                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none col-span-2 lip-gloss-2"
-                  style={{ backgroundImage: `url(${selectedItem.itemImg2})` }}
+                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none col-span-2 lip-glosses"
+                  style={{ backgroundImage: `url(${selectedItem.item_img_2})` }}
                 ></div>
                 <div
-                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none col-span-2 lip-gloss-3"
-                  style={{ backgroundImage: `url(${selectedItem.itemImg3})` }}
+                  className="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none col-span-2 lip-glosses"
+                  style={{ backgroundImage: `url(${selectedItem.item_img_3})` }}
                 ></div>
               </div>
             </div>
@@ -40,15 +40,15 @@ const ShopItems = ({ selectedItem, setSelectedItem }) => {
             <div className="p-4 grid grid-cols-[20%_1fr] gap-x-6 max-w-[70%]">
               <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#141414] py-5">
                 <p className="text-gray-800 text-[1rem] md:text-lg font-normal leading-normal">Shade</p>
-                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* Rose Petal */}{selectedItem.productDetails.shade}</p>
+                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* Rose Petal */}{selectedItem.shade}</p>
               </div>
               <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#141414] py-5">
                 <p className="text-gray-800 text-[1rem] md:text-lg font-normal leading-normal">Finish</p>
-                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* Glossy */} {selectedItem.productDetails.finish}</p>
+                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* Glossy */} {selectedItem.finish}</p>
               </div>
               <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#141414] py-5">
                 <p className="text-gray-800 text-[1rem] md:text-lg font-normal leading-normal">Size</p>
-                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* 0.15 fl oz */} {selectedItem.productDetails.size}</p>
+                <p className="text-[#181113] text-center text-[1rem] md:text-lg font-normal leading-normal">{/* 0.15 fl oz */} {selectedItem.size}</p>
               </div>
             </div>
 

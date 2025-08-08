@@ -29,6 +29,4 @@ dist-ssr
 # Unwanted files
 src/services/
 src/components/Shop/items.js
-/img/shop/
-/img/shopItems/
 jsconfig.json

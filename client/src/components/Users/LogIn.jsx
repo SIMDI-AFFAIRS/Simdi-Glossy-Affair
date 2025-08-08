@@ -26,16 +26,18 @@ const LogIn = () => {
     try {
       await toast.promise(
         (async () => {
-          const user = await login(email, password);
+          const user = await login({ email, password });
           setMessage('Logged in Successfully!');
 
           if (user) {
             navigate('/profile');
+          } else {
+            console.log('Failed to navigate user', user);
           }
         })(),
         {
           loading: 'Logging In...',
-          error: 'Log in failed, try again',
+          error: '',
           success: 'Logged in successfully!'
         }
       )

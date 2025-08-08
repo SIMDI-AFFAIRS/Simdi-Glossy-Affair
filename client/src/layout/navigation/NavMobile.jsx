@@ -19,15 +19,16 @@ const NavMobile = () => {
   };
 
   const handleNavClick = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.currentTarget === e.target) {
+    // if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.currentTarget === e.target) {
       setIsOpen(false);
       setIsNavbarOpen(false);
       setIsHamburgerOpen(false);
       console.log('Clicked a navigation')
-    }
+    // }
   };
+
   return (
     <div className='w-full h-full transition-all duration-300 ease-in-out relative'>
       <div className="flex items-center justify-between">
@@ -54,7 +55,7 @@ const NavMobile = () => {
       <div
         className={`fixed !z-[100] top-[4rem] left-0 h-full w-2/4 max-w-x rounded-br-2xl shadow-lg transition-transform duration-500 ease-in-out ${isOpen || isNavbarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         style={{ boxShadow: isOpen || isNavbarOpen ? '20px 0 16px rgba(0,0,0,0.08)' : 'none' }}
-        onClick={handleNavClick}
+        // onClick={handleNavClick}
       >
         <div className='backdrop-blur-2xl bg-black/100 rounded-br-2xl'>
           <div className='flex flex-col gap-8 py-8 px-6 bg-white/60 rounded-br-2xl'>
@@ -84,9 +85,9 @@ const NavMobile = () => {
             {routes.map((route) => {
               const { title, to } = route;
               return(
-                <>
-                  <NavLink key={title} className="mobile-nav hover:scale-105 transition-all duration-150 w-28 mx-auto border text-center px-5 py-2 rounded-xl" to={to}>{title}</NavLink>
-                </>
+                <NavLink className='w-28 mx-auto border text-center px-5 py-2 rounded-xl hover:scale-105 transition-all duration-150' key={title} to={to} onClick={handleNavClick}>
+                  <span className="w-full" >{title}</span>
+                </NavLink>
               )
             })}
           </div>

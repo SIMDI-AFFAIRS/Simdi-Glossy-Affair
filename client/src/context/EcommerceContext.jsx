@@ -47,7 +47,7 @@ export const EcommerceProvider = ({ children }) => {
       email: email, 
       password: password, 
       options: {
-        emailRedirectTo: 'https://simdis-glossy-affair.vecel.app/email-confirmed',
+        emailRedirectTo: 'https://simdis-glossy-affair.vercel.app/email-confirmed',
       },
     });
     if (error.message === 'User already registered') {

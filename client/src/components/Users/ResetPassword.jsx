@@ -75,9 +75,9 @@ const ResetPassword = () => {
           setSuccess(true);
           
           // Auto redirect after 3 seconds
-          setTimeout(() => {
+          /* setTimeout(() => {
             window.location.href = '/login';
-          }, 3000);
+          }, 3000); */
 
           return true;
         })(),

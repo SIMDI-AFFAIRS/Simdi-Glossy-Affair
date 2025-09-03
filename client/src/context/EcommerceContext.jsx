@@ -76,6 +76,7 @@ export const EcommerceProvider = ({ children }) => {
     setUser(null);
     console.log('User logged out');
     toast.success('Logged out successfully');
+window.location.reload();
   };
 
   // Fetch all products

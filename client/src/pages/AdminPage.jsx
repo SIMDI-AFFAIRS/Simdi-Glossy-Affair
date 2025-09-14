@@ -1,12 +1,11 @@
-import React from 'react';
-import Dashboard from '../components/Admin/Dashboard';
+import AdminDashboard from '../components/Admin/AdminDashboard';
 import AdminDashContextProvider from '../context/AdminDashContext';
 
 const AdminPage = () => {
   return (
     <div>
       <AdminDashContextProvider>
-        <Dashboard />
+        <AdminDashboard />
       </AdminDashContextProvider>
     </div>
   )

@@ -20,6 +20,10 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const ShopPage = lazy(() => import('./pages/ShopPage'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
+const AdminProducts = lazy(() => import('./components/Admin/AdminProducts')); // Admin products view dash
+const AdminAddProducts = lazy(() => import('./components/Admin/Dashboard')); // Admin add products
+const Analytics = lazy(() => import('./components/Admin/Analytics')); // Admin add products
+const OrdersManagement = lazy(() => import('./components/Admin/OrdersManagement')); // Admin add products
 const UserPage = lazy(() => import('./pages/userPage'));
 const CheckOut = lazy(() => import('./pages/ShippingPage'));
 const LogInPage = lazy(() => import('./components/Users/LogIn'));
@@ -69,6 +73,10 @@ const App = () => {
         <Route path='/cart' element={ <CartPage/> } />
         <Route path='/checkout' element={ <CheckOut/> } />
         <Route path='/admin' element={ <AdminPage/> } />
+        <Route path='/admin/add' element={ <AdminAddProducts/> } />
+        <Route path='/admin/products' element={ <AdminProducts/> } />
+        <Route path='/admin/analytics' element={ <Analytics/> } />
+        <Route path='/admin/orders' element={ <OrdersManagement/> } />
         <Route path='/profile' element={ <UserPage/> } />
         <Route path='/login' element={ <LogInPage/> } />
         <Route path='/signup' element={ <SignUpPage/> } />

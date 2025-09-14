@@ -2,6 +2,7 @@ import DragAndDrop from './DragAndDrop';
 import { supabase } from '../../lib/supabase';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [formData, setFormData] = useState({
@@ -197,10 +198,10 @@ const Dashboard = () => {
 
   return (
     <div
-      className="min-h-screen w-full bg-gradient-to-tr from-[#a75e5eb3] to-[#ac9f9f] flex flex-col items-center py-5 px-5 md:px-10 overflow-x-hidden"
+      className="min-h-screen w-full bg-black/90 flex flex-col items-center py-5 px-5 md:px-10 overflow-x-hidden"
       style={{ fontFamily: 'Plus Jakarta Sans, Noto Sans, sans-serif' }}
     >
-      <div className="w-full max-w-6xl bg-gradient-to-tr from-[#a75e5eb3] to-[#807474] rounded-2xl shadow-lg p-6 flex flex-col gap-6">
+      <div className="w-full max-w-6xl bg-gradient-to-tr from-[#a75e5eb3] to-[#807474] rounded-2xl shadow-md shadow-white/70 p-6 flex flex-col gap-6">
         <h2 className="text-white text-2xl md:text-3xl font-bold leading-tight mb-2">Add a product</h2>
 
         {/* Product Title */}
@@ -220,8 +221,8 @@ const Dashboard = () => {
         {/* Media Section */}
         <div className="w-full h-full">
           <h3 className="text-white text-lg font-bold mb-2 mt-4">Media</h3>
-          <div className="w-full">
-            <div className="flex flex-col w-full md:w-[50%]">
+          <div className="w-full h-full">
+            {/* <div className="flex flex-col w-full md:w-[50%]">
               <label className="text-white text-base font-medium mb-2">Main image</label>
               <div className="w-full h-full mx-auto md:mx-0">
                 <DragAndDrop
@@ -229,8 +230,18 @@ const Dashboard = () => {
                   isInvalid={invalidImages.main}
                 />
               </div>
-            </div>
-            <div className="flex flex-col md:flex-row md:space-x-2 mt-6 justify-evenly items-center">
+            </div> */}
+            <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-6 justify-evenly items-center">
+              <div className="w-full h-auto md:h-full flex flex-col grow rounded-xl p-3 mb-2 bg-white/60">
+                <label className="text-black text-lg text-shadow-2xs text-shadow-gray-700 font-medium mb-2">Main image</label>
+                <div className="w-full h-full mx-auto md:mx-0">
+                  <DragAndDrop
+                    onFileSelect={(file) => handleImageSelect('main', file)}
+                    isInvalid={invalidImages.main}
+                  />
+                </div>
+              </div>
+
               <div className="w-full h-auto md:h-full flex flex-col border border-[#822b5c] grow rounded-xl p-3 mb-2 bg-[#251a22]">
                 <label className="text-white text-base font-medium mb-2">Image 1</label>
                 <div className="w-full h-full flex items-center justify-center">
@@ -265,7 +276,7 @@ const Dashboard = () => {
         {/* Details Section */}
         <div>
           <h3 className="text-white text-lg font-bold mb-2 mt-4">Details</h3>
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { name: 'price', label: 'Price', type: 'input' },
               { name: 'intro', label: 'Intro', type: 'textarea' },
@@ -277,13 +288,14 @@ const Dashboard = () => {
                 </label>
                 {field.type === 'input' ? (
                   <input
-                    type="text"
+                    type="number"
+                    min={0}
                     name={field.name}
                     required
                     value={formData[field.name]}
                     onChange={handleChange}
                     placeholder={`Enter ${field.label.toLowerCase()}`}
-                    className="form-input w-full rounded-xl text-white border border-[#5c3d4f] bg-[#2e1f27] h-14 placeholder:text-[#be9db0] p-4 text-base focus:outline-none focus:border-[#822b5c]"
+                    className="form-input w-full rounded-xl text-white border border-[#5c3d4f] bg-[#2e1f27] h-14 min-h-20 placeholder:text-[#be9db0] p-4 text-base focus:outline-none focus:border-[#822b5c]"
                   />
                 ) : (
                   <textarea
@@ -303,7 +315,7 @@ const Dashboard = () => {
         {/* Specifications Section */}
         <div>
           <h3 className="text-white text-lg font-bold mb-2 mt-4">Specifications</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {['shade', 'finish', 'size', 'color'].map((field, idx) => (
               <div className="flex flex-col gap-2" key={idx}>
                 <label className="text-white text-base font-medium">
@@ -324,7 +336,10 @@ const Dashboard = () => {
         </div>
 
         {/* Save Button */}
-        <div className="flex justify-center mt-4">
+        <div className="flex items-center justify-center space-x-3 mt-4">
+          <Link to='/admin' className='px-6 py-4 rounded-xl text-white text-lg font-bold tracking-wide transition-colors bg-[#2e1f27] cursor-pointer'>
+            Back to Dash
+          </Link>
           <button
             className={`px-6 py-4 rounded-xl text-white text-lg font-bold tracking-wide transition-colors ${
               isSubmitting 

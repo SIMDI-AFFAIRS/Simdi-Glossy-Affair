@@ -33,7 +33,7 @@ const ForgotPassword = () => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://simdis-glossy-affair.vercel.app/reset-password',
+        redirectTo: 'https://glossy-affair.mandc2025.org/reset-password',
       });
 
       if (error) {

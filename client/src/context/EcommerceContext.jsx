@@ -34,7 +34,7 @@ export const EcommerceProvider = ({ children }) => {
   const login = async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
     if (error) {
-      toast.error(error.message);
+      // toast.error(error.message);
       throw error;
     };
     setUser(data.user);

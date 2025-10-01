@@ -63,11 +63,16 @@ const PassKey = ({ handleOnClose }) => {
   };
 
   return (
-    <div className='w-full h-full overflow-y-hidden bg-white rounded-3xl p-5'>
+    <div className='min-w-[350px] h-full overflow-y-hidden bg-white/80 rounded-3xl p-5'>
       <div className='flex justify-center items-center w-full'>
         <section id='token-verification' className='flex flex-col w-full p-2'>
-          <button className='flex float-right -mt-2 items-center w-full text-shadow-md justify-end text-2xl'>
-            <XIcon className='p-0.5 bg-gray-500 rounded-full cursor-pointer' onClick={() => handleOnClose()} />
+          <button className='flex float-right -mt-2 items-center w-full text-shadow-md justify-end'>
+            <XIcon 
+              className='p-0.5 bg-gray-500 rounded-full cursor-pointer' 
+              size={35}
+              onClick={() => handleOnClose()} 
+              disabled={isLoading}
+            />
           </button>
           <h3 className="mb-3 text-3xl text-center font-bold text-gray-900">Verify Passkey</h3>
 
@@ -77,14 +82,14 @@ const PassKey = ({ handleOnClose }) => {
           <input 
             type="text"
             id='passkey'
-            style={{ marginTop: '5px' }}
+            // style={{ marginTop: '5px' }}
             required
             placeholder='Enter admin passkey'
             value={passKey}
             onChange={(e) => setPassKey(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleContinue()}
             disabled={isLoading}
-            className={`flex items-center w-full px-5 py-4 mr-2 text-base font-medium outline-0 mb-5 placeholder:text-gray-500 rounded-2xl ${
+            className={`flex items-center w-full px-5 py-4 mr-2 mt-1.5 text-base font-medium outline-0 mb-5 placeholder:text-gray-500 rounded-2xl ${
               isLoading ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'focus:bg-gray-400 bg-gray-400 text-gray-900'
             }`}
           />

@@ -85,7 +85,7 @@ const AdminDashboard = () => {
               Admin Dashboard
             </h1>
             <p className="text-[#413c3f] text-lg mb-2">
-              Welcome back, {user?.email || 'Administrator'}!
+              Welcome back, {user?.name || 'Administrator'}!
             </p>
             <p className="text-[#1d181b] text-xl font-medium">
               You have complete control over your store's products and operations

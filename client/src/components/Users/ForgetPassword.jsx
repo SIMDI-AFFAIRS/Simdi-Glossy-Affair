@@ -32,6 +32,21 @@ const ForgotPassword = () => {
     setErrors({});
 
     try {
+      // First check if user exists
+      const { data: userExists, error: checkError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+      if (checkError || !userExists) {
+        toast.error('No account found with this email');
+        setErrors({ email: 'No account found with this email' });
+        setLoading(false);
+        return;
+      }
+
+      // If user exists, proceed with password reset
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: 'https://glossy-affair.mandc2025.org/reset-password',
       });
@@ -42,7 +57,7 @@ const ForgotPassword = () => {
       } else {
         toast.success('Reset link sent! Check your email');
         setEmailSent(true);
-        setCoolDown(60); // 60 seconds cooldown
+        setCoolDown(60); // 60 seconds cool-down
 
         const timer = setInterval(() => {
           setCoolDown((prev) => {
@@ -150,7 +165,7 @@ const ForgotPassword = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-200 block">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-6 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="email"
                   value={email}
@@ -160,6 +175,7 @@ const ForgotPassword = () => {
                   }`}
                   placeholder="Enter your email address"
                   required
+                  disabled={loading || coolDown > 0}
                 />
                 {errors.email && (
                   <p className="text-red-400 text-sm mt-1">{errors.email}</p>
@@ -172,7 +188,7 @@ const ForgotPassword = () => {
               type="button"
               onClick={handleSend}
               disabled={loading || coolDown > 0}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer"
             >
               {loading ? (
                 <>

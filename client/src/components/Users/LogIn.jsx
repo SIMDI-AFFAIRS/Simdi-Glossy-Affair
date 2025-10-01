@@ -88,12 +88,12 @@ const LogIn = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl mb-4">
             <User className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+          {/* <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1> */}
           <p className="text-gray-300">Sign in to your account to continue</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl py-5 px-8 border border-white/20 shadow-2xl">
           <form onSubmit={handleLogIn} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">

@@ -139,7 +139,7 @@ const SignUp = () => {
         </div>
 
         {/* Signup Form */}
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl px-8 py-5 border border-white/20 shadow-2xl">
           <form onSubmit={handleSignup} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
@@ -192,25 +192,29 @@ const SignUp = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-200 block">Confirm Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-6 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`w-full pl-11 pr-11 py-3 bg-white/5 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-white/20 hover:border-white/30'
+                    confirmPassword && (password === confirmPassword ? 'border-green-500' : 'border-red-500')
                   }`}
                   placeholder="Confirm your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                  className="absolute right-3 top-6 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
-                {errors.confirmPassword && (
-                  <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>
+                {confirmPassword && (
+                  <p className={`text-sm mt-1 ${
+                    password === confirmPassword ? 'text-green-400' : 'text-red-400'
+                  }`}>
+                    {password === confirmPassword ? 'Passwords matched' : 'Passwords do not match'}
+                  </p>
                 )}
               </div>
             </div>

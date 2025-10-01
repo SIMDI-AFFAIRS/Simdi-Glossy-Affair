@@ -182,7 +182,7 @@ const AdminProducts = () => {
 
   return (
     <div
-      className="min-h-screen w-full bg-[#2a2a2a] py-5 px-5 md:px-10"
+      className="min-h-screen w-full bg-[#2a2a2a] py-5 px-5 md:px-7"
       style={{ fontFamily: 'Plus Jakarta Sans, Noto Sans, sans-serif' }}
     >
       <div className="w-full max-w-7xl mx-auto bg-gradient-to-tr from-[#a75e5eb3] to-[#807474] rounded-2xl shadow-lg p-6">
@@ -254,11 +254,11 @@ const AdminProducts = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-[#251a22] border border-[#822b5c] rounded-xl p-4 hover:bg-[#2e1f27] transition-colors"
+                className="bg-[#251a22] border border-[#822b5c] rounded-xl p-4 hover:bg-[#2e1f27] transition-colors flex flex-col justify-between h-full"
               >
                 {/* Product Image */}
                 <div className="w-full h-48 mb-4 rounded-lg overflow-hidden bg-gray-200">
@@ -279,20 +279,22 @@ const AdminProducts = () => {
                 </div>
 
                 {/* Product Details */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-start">
+                <div className="space-y-3 flex flex-col justify-between flex-1">
+                  <div className="flex justify-between items-start flex-col">
                     <h3 className="text-white font-bold text-lg leading-tight">
                       {product.title || 'Untitled Product'}
                     </h3>
-                    <span className="text-[#be9db0] text-sm whitespace-nowrap ml-2">
-                      ID: {product.id}
+                    <span className="text-white text-sm whitespace-nowrap flex items-center justify-center mt-2">
+                      <h3 className='font-bold'>ID:</h3> <span className='text-[#be9db0] ml-1'>{product.id}</span>
                     </span>
                   </div>
 
+                  {/* Price section */}
                   <div className="text-white font-semibold text-xl">
                     GH¢ {product.price || '0.00'}
                   </div>
 
+                  {/* Products Specs */}
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
                       <span className="text-[#be9db0]">Shade:</span>
@@ -321,25 +323,25 @@ const AdminProducts = () => {
                   <div className="text-xs text-[#be9db0]">
                     Added: {product.created_at ? formatDate(product.created_at) : 'Unknown'}
                   </div>
+                </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2">
-                    <button
-                      onClick={() => handleEditProduct(product)}
-                      className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setShowDeleteModal(true);
-                      }}
-                      className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-3 relative right-0 bottom-0 [&>_.action-btn]:cursor-pointer">
+                  <button
+                    onClick={() => handleEditProduct(product)}
+                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm action-btn"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(product);
+                      setShowDeleteModal(true);
+                    }}
+                    className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm action-btn"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -350,7 +352,7 @@ const AdminProducts = () => {
       {/* Edit Product Modal */}
       {showEditModal && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#2e1f27] rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#2e1f27] rounded-xl p-10 max-w-2xl w-full max-h-[90vh] overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style]:none [scrollbar-width]:none">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-white text-xl font-bold">Edit Product</h3>
               <button
@@ -358,9 +360,9 @@ const AdminProducts = () => {
                   setShowEditModal(false);
                   setSelectedProduct(null);
                 }}
-                className="text-[#be9db0] hover:text-white transition-colors text-2xl"
+                className="text-[#be9db0] hover:text-white transition-colors text-2xl cursor-pointer font-bold"
               >
-                ×
+                X
               </button>
             </div>
 
